@@ -1,11 +1,14 @@
 Rails.application.routes.draw do
-  resources :comments
-  resources :pictures do
-    resources :comments, module: :pictures
+
+  resources :comments do
+    resources :pictures
   end
   resources :posts do
-    resource :comments, module: :posts
+    resources :pictures
   end
+
+  resources :pictures
+
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

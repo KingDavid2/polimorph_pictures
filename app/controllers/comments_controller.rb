@@ -15,6 +15,7 @@ class CommentsController < ApplicationController
   # GET /comments/new
   def new
     @comment = Comment.new
+    4.times { @comment.pictures.build }
   end
 
   # GET /comments/1/edit
@@ -24,13 +25,11 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.json
   def create
-    # render json: params
-    @comment = Comment.new(body: comment_params[:body])
+    # render json: comment_params
+    @comment = Comment.new(comment_params)
 
     respond_to do |format|
       if @comment.save
-        p = @comment.pictures.new pic: comment_params[:pic]
-        p.save!
         format.html { redirect_to comments_url, notice: 'Comment was successfully created.' }
         format.json { render :show, status: :created, location: @comment }
       else
@@ -72,7 +71,7 @@ class CommentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def comment_params
-      params.require(:comment).permit(:body, :pic, :pic_cache)
+      params.require(:comment).permit(:body, pictures_attributes: [:id, :pic, :_destroy])
     end
 
 end
